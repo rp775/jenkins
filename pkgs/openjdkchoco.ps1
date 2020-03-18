@@ -259,3 +259,45 @@ Install-ChocolateyEnvironmentVariable 'JAVA_HOME' $targetDir\jdk-12.0.2+10-jre '
 # The full path instead of the %JAVA_HOME% is needed so it can be removed with the Chocolatey Uninstall
 Install-ChocolateyPath 'C:\Program Files\AdoptOpenJDK\jdk-12.0.2+10-jre\bin' -PathType 'Machine'
 
+
+
+
+
+
+INSTALL
+
+$ErrorActionPreference = 'Stop';
+
+$packageName = 'SpringToolSuite'
+$packageVersion = '3.9.6'
+$archiveFolderToUnzip = "sts-bundle\sts-$packageVersion.RELEASE"
+$unzipLocation = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
+
+$url        = "https://download.springsource.com/release/STS/3.9.6.RELEASE/dist/e4.9/spring-tool-suite-3.9.6.RELEASE-e4.9.0-win32.zip"
+$checksum32 = "1f136696cf2982cdd089e89bf997d1b2472e7297"
+$url64      = "https://download.springsource.com/release/STS/3.9.6.RELEASE/dist/e4.9/spring-tool-suite-3.9.6.RELEASE-e4.9.0-win32-x86_64.zip"
+$checksum64 = "59de36dcbd94c56ce544c7551c324b4be295e8a3"
+
+$DesktopPath = [Environment]::GetFolderPath("Desktop")
+
+Install-ChocolateyZipPackage -PackageName $packageName `
+    -UnzipLocation $unzipLocation `
+    -Url $url `
+    -Url64bit $url64 `
+    -Checksum $checksum32 `
+    -Checksum64 $checksum64 `
+    -SpecificFolder "$archiveFolderToUnzip\*" `
+    -checksumType64 "sha1"
+
+Install-ChocolateyShortcut `
+    -ShortcutFilePath $(Join-Path $DesktopPath "STS.lnk") `
+    -TargetPath $(Join-Path $(Join-Path $unzipLocation $archiveFolderToUnzip) "STS.exe")
+    
+    UINSTALL
+    
+    $DesktopPath = [Environment]::GetFolderPath("Desktop")
+$ShortcutPath = $(Join-Path $DesktopPath "STS.lnk")
+
+if ($(Test-Path $ShortcutPath) -eq $true) {
+    Remove-Item -Path $ShortcutPath
+}
