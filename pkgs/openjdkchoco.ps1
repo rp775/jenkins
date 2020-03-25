@@ -116,3 +116,8 @@ if (Test-Path "$officetempfolder") {
 
 
 
+Uninstall-ChocolateyPackage -PackageName $packageName `
+                                -FileType $installerType `
+                                -SilentArgs "$silentArgs" `
+                                -ValidExitCodes $validExitCodes `
+                                -File "$file"
