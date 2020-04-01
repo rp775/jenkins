@@ -121,3 +121,43 @@ Uninstall-ChocolateyPackage -PackageName $packageName `
                                 -SilentArgs "$silentArgs" `
                                 -ValidExitCodes $validExitCodes `
                                 -File "$file"
+                                
+                                
+                                
+                              
+=======================
+
+$ErrorActionPreference = 'Stop'; # stop on all errors
+
+$filename = 'JetBrains.ReSharperUltimate.2019.3.4.exe'
+
+$platformPackageName = 'resharper-platform'
+
+$scriptPath = $(Split-Path -parent $MyInvocation.MyCommand.Definition)
+$commonPath = $(Split-Path -parent $(Split-Path -parent $scriptPath))
+$installPath = Join-Path  (Join-Path $commonPath $platformPackageName) $filename
+Uninstall-ChocolateyPackage $env:ChocolateyPackageName 'exe' '/Silent=True /SpecificProductNamesToRemove=ReSharper /VsVersion=*' $installPath
+
+
+$ErrorActionPreference = 'Stop'; # stop on all errors
+
+$filename = 'JetBrains.ReSharperUltimate.2019.3.4.exe'
+
+$platformPackageName = 'resharper-platform'
+
+$scriptPath = $(Split-Path -parent $MyInvocation.MyCommand.Definition)
+$commonPath = $(Split-Path -parent $(Split-Path -parent $scriptPath))
+$installPath = Join-Path  (Join-Path $commonPath $platformPackageName) $filename
+$packageArgs = @{
+  packageName   = $env:ChocolateyPackageName
+  fileType      = 'exe'
+  file          = $installPath
+  silentArgs    = "/Silent=True /SpecificProductNames=ReSharper /VsVersion=*"
+  validExitCodes= @(0)
+  softwareName  = 'ReSharper'
+}
+Install-ChocolateyInstallPackage @packageArgs
+
+
+# Stop any JetBrains ETW provider services
+Get-Service | Where-Object { $_.Name -like "JetBrainsETW*" } | Stop-Service
