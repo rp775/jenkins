@@ -161,3 +161,30 @@ Install-ChocolateyInstallPackage @packageArgs
 
 # Stop any JetBrains ETW provider services
 Get-Service | Where-Object { $_.Name -like "JetBrainsETW*" } | Stop-Service
+
+
+
+
+
+$packageName= 'bob'
+$toolsDir   = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
+$url        = 'https://somewhere.com/file.msi'
+$url64      = 'https://somewhere.com/file-x64.msi'
+$urlTransform = 'https://somewhere.com/file.mst'
+$mstFileLocation = Join-Path $toolsDir 'transform.mst'
+
+Get-ChocolateyWebFile -PackageName 'bob' `
+                      -Url $urlTransform -FileFullPath $mstFileLocation `
+                      -Checksum '1234' -ChecksumType 'sha256'
+
+$packageArgs = @{
+  packageName   = $packageName
+  fileType      = 'msi'
+  file          = $fileLocation
+  silentArgs    = "/qn /norestart TRANSFORMS=`"$mstFileLocation`""
+  validExitCodes= @(0, 3010, 1641)
+  softwareName  = 'Bob*'
+}
+
+Install-ChocolateyInstallPackage @packageArgs
+
