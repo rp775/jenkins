@@ -1,5 +1,5 @@
 # jenkins
-
+https://github.com/remmelz/ansible-role-firewalld-gsync/blob/master/files/gsync
 
 #!/usr/bin/env bash
 #https://techstat.net/automatic-whitelist-cloudflare-ips-firewalld-bash-script-via-cron-job/
