@@ -1,3 +1,18 @@
+for idx, i in enumerate(data):
+    if len(i['SER_Records']) != 0:
+        for j, SER_Records in enumerate(i['SER_Records']):
+            if (SER_Records['USAGE']!='None' and SER_Records['STATUS']!=0 and SER_Records['OWNER']!=""):
+                #del dir_dict['TEST_DIRS'][item[0]]['TEST_MODES'][item[1]]
+                print(data[idx]['SER_Records'][j])
+                del data[idx]['SER_Records'][j]
+                 
+                
+    if len(i['GNI_Records']) != 0:
+        for m, GNI_Records in enumerate(i['GNI_Records']):
+            if (GNI_Records['CLASSIFICATION']!=""):
+                print(data[idx]['GNI_Records'][m])
+                del data[idx]['GNI_Records'][m]
+
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
